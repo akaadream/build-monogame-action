@@ -1,12 +1,12 @@
-name: "Build MonoGame project"
+name: "MonoGame Builder"
 
-author: "igotinfected (Jason Rebelo Neves)"
+author: "akaadream"
 
 description: "Build your MonoGame projects with this action. Useful for build checks."
 
 inputs:
   dotnet-version:
-    description: ".NET version to set up `dotnet` with. Defaults to `3.1.x`."
+    description: ".NET version to set up `dotnet` with. Defaults to `8.0.x`."
     required: false
     default: "8.0.x"
   solution-path:
