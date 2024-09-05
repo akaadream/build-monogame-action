@@ -8,7 +8,7 @@ inputs:
   dotnet-version:
     description: ".NET version to set up `dotnet` with. Defaults to `3.1.x`."
     required: false
-    default: "3.1.x"
+    default: "8.0.x"
   solution-path:
     description: "Path to the `.sln`. Used to restore NuGet packages from."
     required: true
