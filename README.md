@@ -11,30 +11,33 @@ It then builds the `Content` resources using `mgcb` and then builds the game/pro
 name: Run checks on incoming PR
 
 on:
-  pull_request:
-    branches: [master, release, develop]
+  push:
+    branches: [main]
 
   # allow running this workflow manually
   workflow_dispatch:
 
 jobs:
-  android-build-check:
-    runs-on: windows-latest
+  build:
+    name: build-${{ matrix.os }}
+    runs-on: ${{ matrix.os}}-latest
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build android project
-        uses: igotinfected-ci/build-monogame@v2
+        uses: akaadream/monogame-builder-action@v0.1.0
         with:
           solution-path: '${{ github.workspace }}\Project\Project.sln'
           content-mgcb-path: '${{ github.workspace }}\Project\Android\Content'
           content-mgcb-platform: "Android"
           csproj-path: '${{ github.workspace }}\Project\Android.csproj'
-          build-target: "PackageForAndroid"
+          build-target: "PackageForWindows"
           build-configuration: "Release"
+          build-os: "win-x64"
 ```
 # License
 
+This Github Action is based on the works of [igotinfected](https://github.com/igotinfected) and updated for modern version of MonoGame.
 The scripts and documentation in this project are released under the [MIT License](LICENSE)

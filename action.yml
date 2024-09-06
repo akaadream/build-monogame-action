@@ -6,7 +6,7 @@ description: "Build your MonoGame projects with this action. Useful for build ch
 
 inputs:
   dotnet-version:
-    description: ".NET version to set up `dotnet` with. Defaults to `8.0.x`."
+    description: ".NET version used to build the project."
     required: false
     default: "8.0.x"
   solution-path:
@@ -32,9 +32,13 @@ inputs:
     description: "The `msbuild` target to use. E.g.: `PackageForAndroid`."
     required: true
   build-configuration:
-    description: "The `msbuild` build configuration to use. Defaults to `Release`."
+    description: "The build configuration to use. Defaults to `Release`."
     required: true
     default: "Release"
+  build-os:
+    description: "The OS target of the build: Defaults is `win-x64`"
+    required: true
+    default: "win-x64"
 
 runs:
   using: "composite"
@@ -44,9 +48,6 @@ runs:
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
 
-    - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.1
-
     - name: Install MGCB
       run: dotnet tool install -g dotnet-mgcb
       shell: pwsh
@@ -55,19 +56,22 @@ runs:
       run: nuget restore "${{ inputs.solution-path }}"
       shell: pwsh
 
-    - name: Build resources
-      run: |
-        cd "${{ inputs.content-mgcb-path }}"
-        mgcb Content.mgcb /platform:${{ inputs.content-mgcb-platform }}
-      shell: pwsh
+    # - name: Build resources
+    #   run: |
+    #     cd "${{ inputs.content-mgcb-path }}"
+    #     mgcb Content.mgcb /platform:${{ inputs.content-mgcb-platform }}
+    #   shell: pwsh
 
     - name: Build project
       run: |
-        msbuild "${{ inputs.csproj-path }}" `
-          -t:${{ inputs.build-target }} `
-          -p:Configuration=${{ inputs.build-configuration }}
+        dotnet publish ${{ inputs.csproj-path }} `
+          -c Release `
+          -r ${{ inputs.build-target }}-${{ inputs.build-os }} `
+          /p:PublishReadyToRun=false `
+          /p:TieredCompilation=false `
+          --self-contained
       shell: pwsh
 
 branding:
   icon: "check-circle"
-  color: "red"
+  color: "green"
