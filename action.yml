@@ -25,9 +25,6 @@ inputs:
       Path to the `.csproj` to build with.
       This is passed to `msbuild` to initiate the build.
     required: true
-  build-target:
-    description: "The `msbuild` target to use. E.g.: `PackageForAndroid`."
-    required: true
   build-configuration:
     description: "The build configuration to use. Defaults to `Release`."
     required: true
@@ -63,7 +60,7 @@ runs:
       run: |
         dotnet publish ${{ inputs.csproj-path }} `
           -c Release `
-          -r ${{ inputs.build-target }}-${{ inputs.build-os }} `
+          -r ${{ inputs.build-os }} `
           /p:PublishReadyToRun=false `
           /p:TieredCompilation=false `
           --self-contained
