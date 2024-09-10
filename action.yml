@@ -1,9 +1,6 @@
 name: "MonoGame Builder"
-
 author: "akaadream"
-
 description: "Build your MonoGame projects with this action. Useful for build checks."
-
 inputs:
   dotnet-version:
     description: ".NET version used to build the project."
