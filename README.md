@@ -1,43 +1,52 @@
-# build-monogame
+# MonoGame Builder
 
-This action allows you to build your monogame project via **msbuild**.
+This action allow you to build a **MonoGame project**.
 
-The action sets up `dotnet`, `msbuild`, and the `mgcb` build tool.
-It then builds the `Content` resources using `mgcb` and then builds the game/project using `msbuild`.
+The action sets up `dotnet` and you project's dependencies.
+It then builds the `Content` resources and your MonoGame project.
 
-# Usage
+## Usage
 
 ```yml
-name: Run checks on incoming PR
+name: Build MonoGame Project
 
 on:
   push:
     branches: [main]
-
-  # allow running this workflow manually
-  workflow_dispatch:
-
 jobs:
   build:
-    name: build-${{ matrix.os }}
-    runs-on: ${{ matrix.os}}-latest
+    name: build-windows
+    runs-on: windows-latest
 
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
 
       - name: Build android project
-        uses: akaadream/monogame-builder-action@v0.1.0
+        uses: akaadream/build-monogame-action@v1.0.0
         with:
+          dotnet-version: "6.0.x"
           solution-path: '${{ github.workspace }}\Project\Project.sln'
-          content-mgcb-path: '${{ github.workspace }}\Project\Android\Content'
-          content-mgcb-platform: "Android"
-          csproj-path: '${{ github.workspace }}\Project\Android.csproj'
-          build-target: "PackageForWindows"
-          build-configuration: "Release"
+          csproj-path: '${{ github.workspace }}\Project\Project.DesktopGL\DesktopGL.csproj'
           build-os: "win-x64"
 ```
-# License
 
-This Github Action is based on the works of [igotinfected](https://github.com/igotinfected) and updated for modern version of MonoGame.
+## Options
+
+* dotnet-version: You can select the version of .NET you want (default `8.0.x`)
+
+## Required options:
+
+* solution-path: The path to you .sln file
+* csproj-path: The path of the C# project you want to build
+* build-os: The OS targeted by the build (default `win-x64`)
+
+## Contributions
+
+Contributions are welcome!  
+You can simply fork the project and create a pull request with a description of the features/fixes you've written.
+
+## License
+
+This Github Action is based on the works of [igotinfected](https://github.com/igotinfected) and updated for modern versions of MonoGame.
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
